@@ -24,9 +24,22 @@ export default function AdminDashboard() {
     const handleDelete = async (id: string) => {
         if (!confirm('Are you sure you want to delete this product?')) return;
 
-        await fetch(`/api/products/${id}`, { method: 'DELETE' });
-        fetchProducts();
-        router.refresh();
+        try {
+            const res = await fetch(`/api/products/${id}`, { method: 'DELETE' });
+
+            if (!res.ok) {
+                const error = await res.json();
+                alert(`Failed to delete product: ${error.error || 'Unknown error'}`);
+                console.error('Delete failed:', error);
+                return;
+            }
+
+            fetchProducts();
+            router.refresh();
+        } catch (error) {
+            alert('Error deleting product. Check console for details.');
+            console.error('Delete error:', error);
+        }
     };
 
     return (
