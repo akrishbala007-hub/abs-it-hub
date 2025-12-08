@@ -5,8 +5,8 @@ import { FadeIn, StaggerContainer, FadeInItem } from '@/components/MotionWrapper
 
 export const dynamic = 'force-dynamic';
 
-export default function Home() {
-  const products = getProducts().slice(0, 3); // Featured items
+export default async function Home() {
+  const products = (await getProducts()).slice(0, 3); // Featured items
 
   return (
     <>

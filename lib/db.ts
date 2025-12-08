@@ -1,5 +1,4 @@
-import fs from 'fs';
-import path from 'path';
+import { supabase } from './supabase';
 
 export interface Product {
     id: string;
@@ -10,43 +9,82 @@ export interface Product {
     image?: string;
 }
 
-const dataDirectory = path.join(process.cwd(), 'data');
-const productsFilePath = path.join(dataDirectory, 'products.json');
+export async function getProducts(): Promise<Product[]> {
+    const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        .order('created_at', { ascending: false });
 
-export function getProducts(): Product[] {
-    if (!fs.existsSync(productsFilePath)) {
+    if (error) {
+        console.error('Error fetching products:', error);
         return [];
     }
-    const fileContents = fs.readFileSync(productsFilePath, 'utf8');
-    return JSON.parse(fileContents);
+
+    return data || [];
 }
 
-export function saveProducts(products: Product[]) {
-    fs.writeFileSync(productsFilePath, JSON.stringify(products, null, 2));
-}
+export async function getProductById(id: string): Promise<Product | null> {
+    const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        .eq('id', id)
+        .single();
 
-export function getProductById(id: string): Product | undefined {
-    const products = getProducts();
-    return products.find((p) => p.id === id);
-}
-
-export function addProduct(product: Product) {
-    const products = getProducts();
-    products.push(product);
-    saveProducts(products);
-}
-
-export function updateProduct(updatedProduct: Product) {
-    let products = getProducts();
-    const index = products.findIndex((p) => p.id === updatedProduct.id);
-    if (index !== -1) {
-        products[index] = updatedProduct;
-        saveProducts(products);
+    if (error) {
+        console.error('Error fetching product:', error);
+        return null;
     }
+
+    return data;
 }
 
-export function deleteProduct(id: string) {
-    let products = getProducts();
-    products = products.filter((p) => p.id !== id);
-    saveProducts(products);
+export async function addProduct(product: Omit<Product, 'id'>): Promise<Product | null> {
+    const { data, error } = await supabase
+        .from('products')
+        .insert([product])
+        .select()
+        .single();
+
+    if (error) {
+        console.error('Error adding product:', error);
+        return null;
+    }
+
+    return data;
+}
+
+export async function updateProduct(updatedProduct: Product): Promise<Product | null> {
+    const { data, error } = await supabase
+        .from('products')
+        .update({
+            name: updatedProduct.name,
+            description: updatedProduct.description,
+            price: updatedProduct.price,
+            category: updatedProduct.category,
+            image: updatedProduct.image
+        })
+        .eq('id', updatedProduct.id)
+        .select()
+        .single();
+
+    if (error) {
+        console.error('Error updating product:', error);
+        return null;
+    }
+
+    return data;
+}
+
+export async function deleteProduct(id: string): Promise<boolean> {
+    const { error } = await supabase
+        .from('products')
+        .delete()
+        .eq('id', id);
+
+    if (error) {
+        console.error('Error deleting product:', error);
+        return false;
+    }
+
+    return true;
 }

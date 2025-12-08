@@ -6,7 +6,7 @@ export async function GET(
     { params }: { params: Promise<{ id: string }> }
 ) {
     const { id } = await params;
-    const product = getProductById(id);
+    const product = await getProductById(id);
     if (!product) {
         return NextResponse.json({ error: 'Product not found' }, { status: 404 });
     }
@@ -20,7 +20,7 @@ export async function PUT(
     try {
         const body = await request.json();
         const { id } = await params;
-        const existingProduct = getProductById(id);
+        const existingProduct = await getProductById(id);
 
         if (!existingProduct) {
             return NextResponse.json({ error: 'Product not found' }, { status: 404 });
@@ -32,8 +32,13 @@ export async function PUT(
             id: id // Ensure ID remains immutable
         };
 
-        updateProduct(updatedProduct);
-        return NextResponse.json(updatedProduct);
+        const result = await updateProduct(updatedProduct);
+
+        if (!result) {
+            return NextResponse.json({ error: 'Failed to update product' }, { status: 500 });
+        }
+
+        return NextResponse.json(result);
     } catch (error) {
         return NextResponse.json({ error: 'Failed to update product' }, { status: 500 });
     }
@@ -44,11 +49,16 @@ export async function DELETE(
     { params }: { params: Promise<{ id: string }> }
 ) {
     const { id } = await params;
-    const existingProduct = getProductById(id);
+    const existingProduct = await getProductById(id);
     if (!existingProduct) {
         return NextResponse.json({ error: 'Product not found' }, { status: 404 });
     }
 
-    deleteProduct(id);
+    const success = await deleteProduct(id);
+
+    if (!success) {
+        return NextResponse.json({ error: 'Failed to delete product' }, { status: 500 });
+    }
+
     return NextResponse.json({ message: 'Product deleted' });
 }

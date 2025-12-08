@@ -4,7 +4,7 @@ import { getProducts } from '@/lib/db';
 export const dynamic = 'force-dynamic';
 
 export default async function Shop({ searchParams }: { searchParams: Promise<{ category?: string }> }) {
-    const allProducts = getProducts();
+    const allProducts = await getProducts();
     const { category } = await searchParams;
 
     const products = category

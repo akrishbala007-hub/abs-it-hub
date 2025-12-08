@@ -1,9 +1,8 @@
 import { NextResponse } from 'next/server';
-import { getProducts, addProduct, Product } from '@/lib/db';
-import { v4 as uuidv4 } from 'uuid';
+import { getProducts, addProduct } from '@/lib/db';
 
 export async function GET() {
-    const products = getProducts();
+    const products = await getProducts();
     return NextResponse.json(products);
 }
 
@@ -16,8 +15,7 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: 'Name and Price are required' }, { status: 400 });
         }
 
-        const newProduct: Product = {
-            id: uuidv4(),
+        const newProduct = {
             name: body.name,
             description: body.description || '',
             price: Number(body.price),
@@ -25,8 +23,13 @@ export async function POST(request: Request) {
             image: body.image || '/placeholder.png'
         };
 
-        addProduct(newProduct);
-        return NextResponse.json(newProduct, { status: 201 });
+        const result = await addProduct(newProduct);
+
+        if (!result) {
+            return NextResponse.json({ error: 'Failed to create product' }, { status: 500 });
+        }
+
+        return NextResponse.json(result, { status: 201 });
     } catch (error) {
         return NextResponse.json({ error: 'Failed to create product' }, { status: 500 });
     }
