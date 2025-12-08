@@ -1,0 +1,26 @@
+[
+    {
+        "id": "1",
+        "name": "Dell Latitude 7490",
+        "description": "Intel Core i7 8th Gen, 16GB RAM, 512GB SSD, 14-inch FHD Display, Windows 10 Pro.",
+        "price": 24500,
+        "category": "laptop",
+        "image": "/images/dell-7490.jpg"
+    },
+    {
+        "id": "2",
+        "name": "HP EliteBook 840 G5",
+        "description": "Intel Core i5 8th Gen, 8GB RAM, 256GB SSD, 14-inch FHD Touch, Windows 11.",
+        "price": 22000,
+        "category": "laptop",
+        "image": "/images/hp-840-g5.jpg"
+    },
+    {
+        "id": "3",
+        "name": "Lenovo ThinkCentre M720q",
+        "description": "Tiny Desktop, Intel Core i5 9th Gen, 16GB RAM, 512GB NVMe, Wi-Fi Built-in.",
+        "price": 18500,
+        "category": "desktop",
+        "image": "/images/lenovo-tiny.jpg"
+    }
+]
