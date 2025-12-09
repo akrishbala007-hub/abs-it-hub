@@ -35,6 +35,8 @@ export const metadata: Metadata = {
     },
 };
 
+import { FadeIn } from '@/components/MotionWrapper';
+
 export default function Contact() {
     // Structured data for Local Business SEO
     const structuredData = {
@@ -137,6 +139,31 @@ export default function Contact() {
                         <p style={{ fontSize: '0.95rem', color: '#666', marginTop: '0.5rem' }}>
                             Send us your requirements and we'll get back to you with the best options.
                         </p>
+                    </div>
+
+                    <div style={{ marginTop: '3rem', marginBottom: '2rem' }}>
+                        <FadeIn delay={0.2}>
+                            <h3 style={{ fontSize: '1.1rem', fontWeight: 600, marginBottom: '1rem' }}>
+                                🗺️ Find Us on Google Maps
+                            </h3>
+                            <div style={{
+                                borderRadius: '1rem',
+                                overflow: 'hidden',
+                                boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+                                border: '1px solid var(--border-color)',
+                                height: '400px'
+                            }}>
+                                <iframe
+                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3916.326260790835!2d76.99268437480826!3d11.01412629210928!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba8582f1da8a6b1%3A0x3e1577dd80e22a44!2sSowripalayam%2C%20Coimbatore%2C%20Tamil%20Nadu!5e0!3m2!1sen!2sin!4v1709664532185!5m2!1sen!2sin"
+                                    width="100%"
+                                    height="100%"
+                                    style={{ border: 0 }}
+                                    allowFullScreen
+                                    loading="lazy"
+                                    referrerPolicy="no-referrer-when-downgrade"
+                                ></iframe>
+                            </div>
+                        </FadeIn>
                     </div>
 
                     <div style={{ marginTop: '2rem', padding: '1.5rem', backgroundColor: '#f0f9ff', borderRadius: '8px', borderLeft: '4px solid var(--primary-color)' }}>
